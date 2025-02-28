@@ -87,6 +87,9 @@
     <ClCompile Include="SString.cpp">
       <Filter>SimpleGameFramework\src</Filter>
     </ClCompile>
+    <ClCompile Include="SimpleUI\SimpleUI.cpp">
+      <Filter>SimpleGameFramework\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SimpleApp.h">
