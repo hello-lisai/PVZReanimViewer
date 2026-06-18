@@ -58,6 +58,13 @@ jobs:
           fi
           ls dist/
 
+      - name: Collect Resource Files (shaders, fonts)
+        shell: bash
+        run: |
+          cp -r shaders dist/
+          cp -r fonts dist/
+          ls -R dist/
+
       - name: Package as ZIP
         shell: pwsh
         run: Compress-Archive -Path dist/* -DestinationPath PVZCapture-x64.zip
