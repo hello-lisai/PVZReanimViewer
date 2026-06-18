@@ -1,7 +1,7 @@
 {
   "name": "simple-game-framework",
   "version-string": "0.0.1",
-  "builtin-baseline": "3426db05b996481ca31e95fff3734cf23e0f51bc",
+  "builtin-baseline": "5e61fbe0fe032db1c1342a206c4a11d8ce3723bf",
   "dependencies": [
     "glew",
     "glm",
