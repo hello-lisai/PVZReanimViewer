@@ -29,5 +29,8 @@
     "pugixml",
     "nlohmann-json",
     "nativefiledialog-extended"
+  ],
+  "overrides": [
+    { "name": "imgui", "version": "1.90.6" }
   ]
 }
