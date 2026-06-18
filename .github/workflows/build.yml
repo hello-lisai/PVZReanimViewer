@@ -36,7 +36,9 @@ jobs:
           vcpkg install --triplet x64-windows --recurse
 
       - name: Build Solution (Release|x64)
-        run: msbuild PVZCapture.sln /p:Configuration=Release /p:Platform=x64 /p:VcpkgTriplet=x64-windows /m /verbosity:minimal
+        env:
+          VCPKG_DEFAULT_TRIPLET: x64-windows
+        run: msbuild PVZCapture.sln /p:Configuration=Release /p:Platform=x64 /m /verbosity:minimal
 
       - name: Prepare Output Directory
         shell: bash
