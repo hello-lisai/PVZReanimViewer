@@ -29,11 +29,12 @@ jobs:
             C:\vcpkg\buildtrees
           key: vcpkg-${{ hashFiles('**/vcpkg.json') }}
 
+      - name: Integrate vcpkg with MSBuild
+        run: vcpkg integrate install
+
       - name: Install vcpkg dependencies
         if: steps.cache-vcpkg.outputs.cache-hit != 'true'
-        run: |
-          vcpkg integrate install
-          vcpkg install --triplet x64-windows --recurse
+        run: vcpkg install --triplet x64-windows --recurse
 
       - name: Build Solution (Release|x64)
         env:
