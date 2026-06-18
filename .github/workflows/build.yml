@@ -1,0 +1,73 @@
+name: Build PVZCapture
+
+on:
+  push:
+    branches: [master, main]
+    tags: ['v*']
+  pull_request:
+    branches: [master, main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Windows x64
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Cache vcpkg
+        id: cache-vcpkg
+        uses: actions/cache@v4
+        with:
+          path: |
+            C:\vcpkg\installed
+            C:\vcpkg\buildtrees
+          key: vcpkg-${{ hashFiles('**/vcpkg.json') }}
+
+      - name: Install vcpkg dependencies
+        if: steps.cache-vcpkg.outputs.cache-hit != 'true'
+        run: |
+          vcpkg integrate install
+          vcpkg install --triplet x64-windows --recurse
+
+      - name: Build Solution (Release|x64)
+        run: msbuild PVZCapture.sln /p:Configuration=Release /p:Platform=x64 /p:VcpkgTriplet=x64-windows /m /verbosity:minimal
+
+      - name: Prepare Output Directory
+        shell: bash
+        run: |
+          mkdir -p dist
+          cp "x64/Release/PVZCapture.exe" "dist/"
+
+      - name: Collect vcpkg DLLs
+        shell: bash
+        run: |
+          VCPKG_INSTALLED="C:/vcpkg/installed/x64-windows/bin"
+          cp "$VCPKG_INSTALLED/"*.dll "dist/"
+
+      - name: Package as ZIP
+        shell: bash
+        run: |
+          cd dist
+          zip -r "../PVZCapture-x64.zip" .
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PVZCapture-x64
+          path: PVZCapture-x64.zip
+          retention-days: 90
+
+      - name: Create Release (tag only)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: PVZCapture-x64.zip
+          name: PVZCapture ${{ github.ref_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
