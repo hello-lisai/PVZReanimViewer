@@ -38,7 +38,7 @@ jobs:
       - name: Build Solution (Release|x64)
         env:
           VCPKG_DEFAULT_TRIPLET: x64-windows
-        run: msbuild PVZCapture.sln /p:Configuration=Release /p:Platform=x64 /m /verbosity:minimal
+        run: msbuild PVZCapture.sln /p:Configuration=Release /p:Platform=x64 /p:VcpkgTriplet=x64-windows /m /verbosity:minimal
 
       - name: Prepare Output Directory
         shell: bash
