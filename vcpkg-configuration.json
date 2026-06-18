@@ -1,0 +1,8 @@
+{
+  "overrides": [
+    {
+      "name": "imgui",
+      "version": "1.89.4"
+    }
+  ]
+}
